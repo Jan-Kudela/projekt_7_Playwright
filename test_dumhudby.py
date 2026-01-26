@@ -37,6 +37,10 @@ def generate_email():
 
 
 def test_new_registration(page: Page):
+
+    # Začne nahrávat před začátkem testu
+    page.context.tracing.start(screenshots=True, snapshots=True, sources=True)
+
     email = generate_email()
     page.goto("https://www.dumhudby.cz/")
     accept_cookies(page)
@@ -56,6 +60,7 @@ def test_new_registration(page: Page):
     #submit button
     assert page.url == "https://www.dumhudby.cz/registration.php?action=reg_ok"
 
+    page.context.tracing.stop(path="trace.zip")
 
 @pytest.mark.sign_in
 def test_sign_in_negative(page: Page):
