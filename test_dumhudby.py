@@ -78,13 +78,12 @@ def test_sign_in_negative(page: Page):
         " Systém rozlišuje velikost písmen"
         )
 
-
 horizontal_menu_bar = [
-    #{"name": "Home", "url_part": ""},
+    {"name": "Home", "url_part": ""},
     {"name": "Kytary", "url_part": "kat-259"},
     {"name": "Struny", "url_part": "kat-907"},
     {"name": "Klávesy", "url_part": "kat-309"},
-    #{"name": "Bicí", "url_part": "www.drumcenter.cz"},
+    {"name": "Bicí", "url_part": "www.drumcenter.cz"},
     {"name": "Zvuk", "url_part": "kat-310"},
     {"name": "Dechy a smyčce", "url_part": "kat-377"},
     {"name": "Noty a učebnice", "url_part": "kat-460"},
