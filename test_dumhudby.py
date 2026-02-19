@@ -3,6 +3,7 @@ import pytest
 import requests
 import time
 
+BASE_URL = "https://www.dumhudby.cz/"
 
 @pytest.fixture
 def page():
@@ -19,12 +20,12 @@ def accept_cookies(page: Page):
 
 
 def test_status():
-    response = requests.get("https://www.dumhudby.cz/")
+    response = requests.get(BASE_URL)
     assert response.status_code == 200
 
 
 def test_accept_cookies(page: Page):
-    page.goto("https://www.dumhudby.cz/")
+    page.goto(BASE_URL)
     accept_button = page.locator("body > div.cookie-line > button")
     accept_button.click()
     cookie_line = page.locator("body > div.cookie-line")
@@ -42,7 +43,7 @@ def test_new_registration(page: Page):
     page.context.tracing.start(screenshots=True, snapshots=True, sources=True)
 
     email = generate_email()
-    page.goto("https://www.dumhudby.cz/")
+    page.goto(BASE_URL)
     accept_cookies(page)
     page.locator("a.user-anchor").click() #prihlasit se button
     page.locator("a.btn.btn-big.btn-second.btn-wide.mtop10").click()
@@ -65,7 +66,7 @@ def test_new_registration(page: Page):
 @pytest.mark.sign_in
 def test_sign_in_negative(page: Page):
     email = generate_email()
-    page.goto("https://www.dumhudby.cz/")
+    page.goto(BASE_URL)
     accept_cookies(page)
     page.locator("a.user-anchor").click() #přihlásit se button
     page.locator("input.inp-text[name='email']").fill(f"{email}") #email
@@ -76,3 +77,29 @@ def test_sign_in_negative(page: Page):
         "Emailová adresa nebo heslo nebylo zadáno správně." \
         " Systém rozlišuje velikost písmen"
         )
+
+
+horizontal_menu_bar = [
+    #{"name": "Home", "url_part": ""},
+    {"name": "Kytary", "url_part": "kat-259"},
+    {"name": "Struny", "url_part": "kat-907"},
+    {"name": "Klávesy", "url_part": "kat-309"},
+    #{"name": "Bicí", "url_part": "www.drumcenter.cz"},
+    {"name": "Zvuk", "url_part": "kat-310"},
+    {"name": "Dechy a smyčce", "url_part": "kat-377"},
+    {"name": "Noty a učebnice", "url_part": "kat-460"},
+    {"name": "Bazar", "url_part": "view-2845"},
+    {"name": "Nové zboží", "url_part": "view-2836"},
+    {"name": "Výprodej", "url_part": "view-2841"},
+    {"name": "Akce a aktuality", "url_part": "novinka.php?action=views"},
+]
+
+@pytest.mark.parametrize("item", horizontal_menu_bar)
+def test_horizontal_menu_bar(page,item):
+    page.goto(BASE_URL)
+    accept_cookies(page)
+
+    page.get_by_role("link", name=item["name"]).first.click()
+    assert item["url_part"] in page.url
+    
+
